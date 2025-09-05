@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MU Student Image Fetcher</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            flex-direction: column;
+        }
+
+        /* Container for the input and button */
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+        }
+
+        /* Logo styling */
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        /* Input field styling */
+        input[type="text"] {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            border-color: #2980b9;
+            box-shadow: 0 0 8px rgba(52, 152, 219, 0.5);
+        }
+
+        /* Button styling */
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Image styling */
+        #studentImage {
+            margin-top: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 100%;
+            height: auto;
+            display: none; /* Initially hidden */
+            border: 3px solid #fff;
+        }
+
+        /* Instructions */
+        .instructions {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #7f8c8d;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 30px;
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            display: none;
+            margin: 20px auto;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Marwadi University</h1>
+        <h2>Student Image Fetcher</h2>
+        
+        <input type="text" id="enrollmentNumber" placeholder="Enter Enrollment Number">
+        <button onclick="updateImage()">Fetch Image</button>
+        
+        <div class="spinner" id="spinner"></div>
+        
+        <img id="studentImage" src="" alt="Student Image">
+        
+        <p class="instructions">Enter your enrollment number and click the button to view your student image.</p>
+    </div>
+    
+    <footer>
+        <p>© 2023 Marwadi University Image Fetcher</p>
+    </footer>
+
+    <script>
+        function updateImage() {
+            // Get the enrollment number from the input field
+            const enrollmentNumber = document.getElementById('enrollmentNumber').value.trim();
+            const spinner = document.getElementById('spinner');
+            const imageElement = document.getElementById('studentImage');
+
+            // Check if the enrollment number is not empty
+            if (enrollmentNumber) {
+                // Show loading spinner
+                spinner.style.display = 'block';
+                imageElement.style.display = 'none';
+                
+                // Construct the new image URL
+                const imageUrl = `https://student.marwadiuniversity.ac.in:553/handler/getImage.ashx?SID=${enrollmentNumber}`;
+                
+                // Create new image to check if it loads successfully
+                const testImage = new Image();
+                testImage.onload = function() {
+                    // Update the src attribute of the image tag
+                    imageElement.src = imageUrl;
+                    imageElement.style.display = 'block';
+                    spinner.style.display = 'none';
+                };
+                
+                testImage.onerror = function() {
+                    alert("No image found for this enrollment number. Please check the number and try again.");
+                    spinner.style.display = 'none';
+                    imageElement.style.display = 'none';
+                };
+                
+                testImage.src = imageUrl;
+            } else {
+                alert("Please enter a valid enrollment number.");
+            }
+        }
+        
+        // Allow pressing Enter to submit
+        document.getElementById('enrollmentNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                updateImage();
+            }
+        });
+    </script>
+</body>
+</html>
