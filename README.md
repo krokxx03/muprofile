@@ -1,2 +1,4 @@
-# MU_Profile
-View photo by Gr. Number
+# Marwadi University_Profile_viewer
+View Profile photo by university Gr. Number
+
+https://krokxx03.github.io/muprofile/
